@@ -1,11 +1,11 @@
 
-from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from core.models.profile import Profile
 from core.models.vehicle_log import VehicleLog
-from core.forms.vehicle_log_form import VehicleLogForm
-from django.urls import reverse_lazy
+from ..forms import VehicleLogForm
 from django.utils import timezone
+from django.shortcuts import redirect
+from ..services import VehicleLogService
 
 
 class ProfileView(TemplateView):
@@ -18,28 +18,36 @@ class ProfileView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        current_date = timezone.now().date()
 
-        has_log_today = VehicleLog.objects.filter(user=self.request.user, return_time__date=current_date).exists()
+        state = VehicleLogService.get_state(self.request.user)
 
-        form = None
-        if not has_log_today:
-            form = VehicleLogForm()
+        if state["vehicle"] is None:
+            context["has_vehicle"] = False
+            return context
 
-        context.update({"form": form, "show_form": not has_log_today})
+        context["already_logged"] = state["already_logged"]
+
+        if not state["already_logged"]:
+            context["form"] = VehicleLogForm()
 
         return context
 
 
     def post(self, request, *args, **kwargs):
-        form = VehicleLogForm(request.POST)
-        if form.is_valid():
-            vehicle_log = form.save(commit=False)
-            vehicle_log.user = self.request.user
-            vehicle_log.save()
-            return HttpResponseRedirect(reverse_lazy("profile"))
+        state = VehicleLogService.get_state(self.request.user)
 
-        context = self.get_context_data()
-        context["form"] = form
-        return self.render_to_response(context)
+        if state["vehicle"] is None or state["already_logged"]:
+            return redirect("profile")
+
+        form = VehicleLogForm(request.POST)
+
+        if form.is_valid():
+            VehicleLogService.create_log(
+                user=self.request.user,
+                mileage=form.cleaned_data["mileage"]
+            )
+
+        return redirect("profile")
+
+
 

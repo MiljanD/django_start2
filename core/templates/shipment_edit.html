@@ -1,0 +1,32 @@
+
+<h2>Edit shipment: {{ object.title }}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <div>
+        <label>Status</label>
+        {{ form.status }}
+    </div>
+    <div>
+        <label>Driver</label>
+        {{ form.driver }}
+    </div>
+    <div>
+        <label>Vehicle</label>
+        {{ form.vehicle }}
+    </div>
+    <button type="submit">Save</button>
+</form>
+
+<h3>Shipment Details</h3>
+<p><b>Title:</b> {{ object.title }}</p>
+<p><b>Description:</b> {{ object.description }}</p>
+<p><b>Company:</b> {{ object.company.name }}</p>
+<p><b>Pickup:</b> {{ object.pickup_location }}</p>
+<p><b>Delivery:</b> {{ object.delivery_location }}</p>
+<p><b>Price:</b> {{ object.price }}</p>
+<p><b>Scheduled:</b> {{ object.scheduled_at }}</p>
+<p><b>Deadline:</b> {{ object.deadline }}</p>
+<p><b>Created:</b> {{ object.created_at }}</p>
+
+<a href="{% url 'dispatch' %}">Back to shipments</a>

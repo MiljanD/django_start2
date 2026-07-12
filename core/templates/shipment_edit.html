@@ -3,6 +3,8 @@
 
 <form method="POST">
     {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.errors }}
     <div>
         <label>Status</label>
         {{ form.status }}
@@ -21,7 +23,7 @@
 <h3>Shipment Details</h3>
 <p><b>Title:</b> {{ object.title }}</p>
 <p><b>Description:</b> {{ object.description }}</p>
-<p><b>Company:</b> {{ object.company.name }}</p>
+<p><b>Company:</b> {{ object.company.company_name }}</p>
 <p><b>Pickup:</b> {{ object.pickup_location }}</p>
 <p><b>Delivery:</b> {{ object.delivery_location }}</p>
 <p><b>Price:</b> {{ object.price }}</p>
@@ -30,3 +32,12 @@
 <p><b>Created:</b> {{ object.created_at }}</p>
 
 <a href="{% url 'dispatch' %}">Back to shipments</a>
+
+<h3>History Edit</h3>
+{% for h in history %}
+    <div>
+        <p>{{ h.history_date }}</p>
+        <p>{{ h.history_user }}</p>
+        <p>{{ h.get_history_type_display }}</p>
+    </div>
+{% endfor %}

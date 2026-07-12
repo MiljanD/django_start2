@@ -34,3 +34,20 @@ class ShipmentUpdateForm(forms.ModelForm):
         self.fields["vehicle"].queryset = vehicle_qs.distinct()
 
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        status = cleaned_data.get("status")
+        driver = cleaned_data.get("driver")
+        vehicle = cleaned_data.get("vehicle")
+
+        if status in [Shipment.Status.ENROUTE, Shipment.Status.DELIVERED]:
+            if not driver:
+                self.add_error("driver", "Driver is required for status 'enroute' or 'completed'")
+
+            if not vehicle:
+                self.add_error("vehicle", "Vehicle is required for status 'enroute' or 'completed'")
+
+        return cleaned_data
+
+

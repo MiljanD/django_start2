@@ -19,3 +19,9 @@ class ShipmentUpdateView(UserPassesTestMixin,UpdateView):
 
     def get_queryset(self):
         return Shipment.objects.filter(dispatcher=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["history"] = self.object.history.all()
+        return context

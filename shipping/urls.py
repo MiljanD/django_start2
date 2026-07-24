@@ -17,8 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
-from core.views import ProfileView, DispatchView, ShipmentUpdateView
+from core.views import (ProfileView, DispatchView,
+                        ShipmentUpdateView, ShipmentView,
+                        ShipmentPriceCalculationView, GenerateInvoiceView)
 from core.admin import admin_site
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 
@@ -27,6 +31,12 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='login.html', next_page='/'), name='login_page'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('dispatch/', DispatchView.as_view(), name='dispatch'),
-    path('shipment/<int:pk>/edit', ShipmentUpdateView.as_view(), name="shipment_edit")
+    path('shipment/<int:pk>/edit', ShipmentUpdateView.as_view(), name="shipment_edit"),
+    path('shipment/generate/', ShipmentView.as_view(), name='generate_shipment'),
+    path('shipment/submit/', ShipmentPriceCalculationView.as_view(), name='submit_shipment'),
+    path('shipment/<int:pk>/generate-invoice/', GenerateInvoiceView.as_view(), name='generate-invoice')
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

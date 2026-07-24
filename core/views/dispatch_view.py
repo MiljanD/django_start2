@@ -10,7 +10,7 @@ class DispatchView(UserPassesTestMixin, ListView):
 
 
     def get_queryset(self, queryset = None):
-        return Shipment.objects.filter(dispatcher=self.request.user)
+        return Shipment.objects.filter(dispatcher=self.request.user).prefetch_related("invoices")
 
 
     def test_func(self):

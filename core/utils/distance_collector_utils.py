@@ -52,11 +52,7 @@ def show_cities_list(city_data_list):
         raise ValueError(f"Selected choice is not valid option. Select from 1 - {len(city_data_list)}.")
     return user_choice - 1
 
-def extract_coords(city_data_list, city_idx=0):
-    if len(city_data_list) > 1:
-        uniques = extract_unique(city_data_list)
-        city_idx = show_cities_list(uniques)
-        return city_data_list[city_idx]["geometry"]["coordinates"]
+def extract_coords(city_data_list, city_idx):
     return city_data_list[city_idx]["geometry"]["coordinates"]
 
 
@@ -76,8 +72,8 @@ def get_distance_by_coords(origin, destination):
 
 
 if __name__ == "__main__":
-    city_from = collect_city_data_by_name("belgrade, serbia")
-    city_to = collect_city_data_by_name("nis, serbia")
+    city_from = collect_city_data_by_name("belgrade")
+    city_to = collect_city_data_by_name("nis")
     origin_coords = extract_coords(city_from)
     destination_cords = extract_coords(city_to)
     distance = get_distance_by_coords(origin_coords, destination_cords)

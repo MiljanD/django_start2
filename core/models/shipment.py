@@ -19,7 +19,7 @@ class Shipment(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="shipments")
     pickup_location = models.ForeignKey(City, on_delete=models.CASCADE, related_name="pickup_shipments")
     delivery_location = models.ForeignKey(City, on_delete=models.CASCADE, related_name="delivery_shipments")
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
     scheduled_at = models.DateTimeField(null=True, blank=True)

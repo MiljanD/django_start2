@@ -1,1 +1,2 @@
 from .vehicle_log_service import VehicleLogService
+from .shipment_service import ShipmentService

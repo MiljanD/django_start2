@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Invoice - Shipment #{{ shipment.id }}</title>
+</head>
+<body>
+
+    <h1>Invoice - {{ shipment.title }}</h1>
+    <p>
+        <strong>Creation date:</strong> {{ created_at }}<br>
+        <strong>Paying deadline:</strong> {{ due_date }}
+    </p>
+
+    <hr style="color: #cccccc; height: 1px; margin: 20px 0;">
+
+    <h3>Shipment details</h3>
+
+    <table width="100%" cellpadding="8" cellspacing="0" border="1" style="border-collapse: collapse; border-color: #cccccc;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th align="left" width="25%">Company</th>
+                <th align="left" width="20%">From</th>
+                <th align="left" width="20%">To</th>
+                <th align="center" width="15%">Distance</th>
+                <th align="right" width="20%">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ shipment.company.company_name }}</td>
+                <td>{{ shipment.pickup_location.city_name }}</td>
+                <td>{{ shipment.delivery_location.city_name }}</td>
+                <td align="center">{{ shipment.estimated_distance }} km</td>
+                <td align="right"><strong>{{ shipment.price }} RSD</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

@@ -11,7 +11,18 @@
         <p>Driver: {{ shipment.driver }}</p>
         <p>Vehicle: {{ shipment.vehicle }}</p>
 
-        <a href="{% url 'shipment_edit' shipment.id %}">Edit</a>
+        <button><a href="{% url 'shipment_edit' shipment.id %}">Edit</a></button><br>
+
+        {% if shipment.invoices.exists %}
+            <a href="{{ shipment.invoices.first.pdf_file.url }}" target="_blank" class="btn btn-info">
+                See Invoice
+            </a>
+        {% else %}
+            <form action="{% url 'generate-invoice' shipment.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Generate Invoice</button>
+            </form>
+        {% endif %}
     </div>
 
 {% endfor %}
